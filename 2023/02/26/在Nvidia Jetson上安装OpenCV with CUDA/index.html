@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/favicon_package_v0.16/favicon.ico">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon_package_v0.16/favicon-16x16.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon_package_v0.16/favicon-32x32.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon_package_v0.16/apple-touch-icon.png">
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>在Nvidia Jetson上安装OpenCV with CUDA | Junshuo&#39;s Blog</title>
+
+
+    <meta name="keywords" content="CV">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="为啥要编译安装由于OpenCV涉及到很多底层的计算机视觉算法和工具，因此它需要与操作系统和硬件紧密集成，以最大化性能和效率。为了实现这一点，OpenCV的源代码需要进行编译和安装，以便将其与特定的操作系统和硬件进行优化和集成。 编译安装为了方便安装，可以使用我写的 shell 脚本进行安装：install_opencv_Jetson.sh  点击上面的链接下载脚本  给脚本添加执行权限 chmod">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在Nvidia Jetson上安装OpenCV with CUDA">
+<meta property="og:url" content="http://yoursite.com/2023/02/26/%E5%9C%A8Nvidia%20Jetson%E4%B8%8A%E5%AE%89%E8%A3%85OpenCV%20with%20CUDA/index.html">
+<meta property="og:site_name" content="Junshuo&#39;s Blog">
+<meta property="og:description" content="为啥要编译安装由于OpenCV涉及到很多底层的计算机视觉算法和工具，因此它需要与操作系统和硬件紧密集成，以最大化性能和效率。为了实现这一点，OpenCV的源代码需要进行编译和安装，以便将其与特定的操作系统和硬件进行优化和集成。 编译安装为了方便安装，可以使用我写的 shell 脚本进行安装：install_opencv_Jetson.sh  点击上面的链接下载脚本  给脚本添加执行权限 chmod">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-26T21:57:00.000Z">
+<meta property="article:modified_time" content="2023-02-26T21:57:00.000Z">
+<meta property="article:author" content="Junshuo">
+<meta property="article:tag" content="CV">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="/css/highlight/dark.css" media="none">
+        
+    
+
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+    <body>
+        <div id="app" tabindex="-1">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">Junshuo&#39;s Blog</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        在Nvidia Jetson上安装OpenCV with CUDA
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2023/02/" class="post-meta__date button">2023-02-26</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h1 id="为啥要编译安装"><a href="#为啥要编译安装" class="headerlink" title="为啥要编译安装"></a>为啥要编译安装</h1><p>由于OpenCV涉及到很多底层的计算机视觉算法和工具，因此它需要与操作系统和硬件紧密集成，以最大化性能和效率。为了实现这一点，OpenCV的源代码需要进行编译和安装，以便将其与特定的操作系统和硬件进行优化和集成。</p>
+<h1 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h1><p>为了方便安装，可以使用我写的 shell 脚本进行安装：<a target="_blank" rel="noopener" href="https://github.com/JunshuoZheng/install_opencv_Jetson">install_opencv_Jetson.sh</a></p>
+<ol>
+<li><p>点击上面的链接下载脚本</p>
+</li>
+<li><p>给脚本添加执行权限 <code>chmod +x</code> <code>install_opencv_Jetson.sh</code></p>
+</li>
+<li><p>执行脚本 <code>.\``install_opencv_Jetson.sh</code></p>
+</li>
+</ol>
+<p>脚本很简单：先删除Jetpack自带的OpenCV，随后安装依赖、下载源码、编译安装。熟悉Linux和CMake的同学一定能看懂。</p>
+<p><strong>❗要注意，第47-48行很关键，如果手动安装，一定要记得这两步：</strong></p>
+<p><code>mkdir opencv-$&#123;version&#125;-release</code>：在workspace目录下创建和源码在同一级的目录 <code>cd opencv-$&#123;version&#125;-release/</code>：指定源码位置</p>
+<p>具体原因见：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">version=<span class="string">&quot;4.6.0&quot;</span></span><br><span class="line">folder=<span class="string">&quot;workspace&quot;</span><span class="comment"># 用于下载和编译的文件夹</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (( ; ; ))</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Do you want to remove the default OpenCV (yes/no)?&quot;</span></span><br><span class="line">    <span class="built_in">read</span> rm_old</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$rm_old</span>&quot;</span> = <span class="string">&quot;yes&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;** Remove other OpenCV first&quot;</span></span><br><span class="line">        sudo apt -y purge *libopencv*</span><br><span class="line">        <span class="built_in">break</span></span><br><span class="line">    <span class="keyword">elif</span> [ <span class="string">&quot;<span class="variable">$rm_old</span>&quot;</span> = <span class="string">&quot;no&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">break</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;------------------------------------&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;** Install requirement (1/4)&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;------------------------------------&quot;</span></span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install -y build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev</span><br><span class="line">sudo apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev</span><br><span class="line">sudo apt-get install -y python3.8-dev python-dev python-numpy python3-numpy</span><br><span class="line">sudo apt-get install -y libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libdc1394-22-dev</span><br><span class="line">sudo apt-get install -y libv4l-dev v4l-utils qv4l2 v4l2ucp</span><br><span class="line">sudo apt-get install -y curl</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;------------------------------------&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;** Download opencv &quot;</span><span class="variable">$&#123;version&#125;</span><span class="string">&quot; (2/4)&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;------------------------------------&quot;</span></span><br><span class="line"><span class="built_in">mkdir</span> <span class="variable">$folder</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$&#123;folder&#125;</span></span><br><span class="line">curl -L https://github.com/opencv/opencv/archive/<span class="variable">$&#123;version&#125;</span>.zip -o opencv-<span class="variable">$&#123;version&#125;</span>.zip</span><br><span class="line">curl -L https://github.com/opencv/opencv_contrib/archive/<span class="variable">$&#123;version&#125;</span>.zip -o opencv_contrib-<span class="variable">$&#123;version&#125;</span>.zip</span><br><span class="line">unzip opencv-<span class="variable">$&#123;version&#125;</span>.zip</span><br><span class="line">unzip opencv_contrib-<span class="variable">$&#123;version&#125;</span>.zip</span><br><span class="line"><span class="built_in">rm</span> opencv-<span class="variable">$&#123;version&#125;</span>.zip opencv_contrib-<span class="variable">$&#123;version&#125;</span>.zip</span><br><span class="line"><span class="comment"># cd opencv-$&#123;version&#125;/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;------------------------------------&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;** Build opencv &quot;</span><span class="variable">$&#123;version&#125;</span><span class="string">&quot; (3/4)&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;------------------------------------&quot;</span></span><br><span class="line"><span class="built_in">mkdir</span> opencv-<span class="variable">$&#123;version&#125;</span>-release</span><br><span class="line"><span class="built_in">cd</span> opencv-<span class="variable">$&#123;version&#125;</span>-release/</span><br><span class="line">cmake ../opencv-<span class="variable">$&#123;version&#125;</span>/ </span><br><span class="line"><span class="comment"># generate a build tree in /opencv-$&#123;version&#125;-release for the source tree in ../opencv-$&#123;version&#125;</span></span><br><span class="line"><span class="comment"># Once you&#x27;ve created it, cmake remembers where the source folder is - so you can rerun cmake on the build tree with</span></span><br><span class="line"><span class="comment"># 指定source tree，在此处生成build tree</span></span><br><span class="line"><span class="comment"># 生成之后，cmake会记住source文件夹在哪儿，所以可以像正常编译一样，执行下面的命令</span></span><br><span class="line">cmake -D WITH_CUDA=ON \</span><br><span class="line">-D WITH_CUDNN=ON \</span><br><span class="line">-D CUDA_ARCH_BIN=<span class="string">&quot;7.2,8.7&quot;</span> \</span><br><span class="line">-D CUDA_ARCH_PTX=<span class="string">&quot;&quot;</span> \</span><br><span class="line">-D OPENCV_GENERATE_PKGCONFIG=ON \</span><br><span class="line">-D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-<span class="variable">$&#123;version&#125;</span>/modules \</span><br><span class="line">-D WITH_GSTREAMER=ON -D WITH_LIBV4L=ON \</span><br><span class="line">-D BUILD_opencv_python3=ON \</span><br><span class="line">-D BUILD_TESTS=OFF \</span><br><span class="line">-D BUILD_PERF_TESTS=OFF \</span><br><span class="line">-D BUILD_EXAMPLES=OFF \</span><br><span class="line">-D CMAKE_BUILD_TYPE=RELEASE \</span><br><span class="line">-D CMAKE_INSTALL_PREFIX=/usr/local ..</span><br><span class="line">make -j$(<span class="built_in">nproc</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;------------------------------------&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;** Install opencv &quot;</span><span class="variable">$&#123;version&#125;</span><span class="string">&quot; (4/4)&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;------------------------------------&quot;</span></span><br><span class="line">sudo make install</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH&#x27;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;export PYTHONPATH=/usr/local/lib/python3.8/site-packages/:$PYTHONPATH&#x27;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+    </div>
+     
+    <div class="post-footer__meta"><p>更新于 2023-02-26</p></div> 
+    <div class="post-entry__tags"><a href="/tags/CV/" class="post-tags__link button"># CV</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2023/02/26/CMake%E5%9C%A8source%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B9%8B%E5%A4%96%E7%BC%96%E8%AF%91/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            上一篇
+                        </div>
+                        <div class="nav__title">
+                            CMake在source文件夹之外编译
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2023/02/26/%E5%B8%B8%E7%94%A8%E8%BF%9C%E7%A8%8B%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E6%B1%87%E6%80%BB/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            下一篇
+                        </div>
+                        <div class="nav__title">
+                            常用远程开发工具汇总
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2022&nbsp;-&nbsp;2023 <a href="/">Junshuo&#39;s Blog</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+
+    
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

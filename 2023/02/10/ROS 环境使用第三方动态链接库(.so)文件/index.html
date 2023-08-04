@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/favicon_package_v0.16/favicon.ico">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon_package_v0.16/favicon-16x16.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon_package_v0.16/favicon-32x32.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon_package_v0.16/apple-touch-icon.png">
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>ROS 环境使用第三方动态链接库(.so)文件 | Junshuo&#39;s Blog</title>
+
+
+    <meta name="keywords" content="ROS">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="在开发socket通信节点时，我使用了libsocket开源库，我使用了较为推荐的动态链接的方式，并成功在ROS节点中调用。 我C++基础不太行，理解可能有错，欢迎执政。 动态链接库是啥为什么c&#x2F;c++开源库使用前需要编译，直接调用源码，最后一起编译不行吗  这样可以运行，但有两个问题：  每个新程序要使用开源库中的api，都需要重新编译部分甚至整个开源库源代码，这会浪费大量的时间； 如">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ROS 环境使用第三方动态链接库(.so)文件">
+<meta property="og:url" content="http://yoursite.com/2023/02/10/ROS%20%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8%E7%AC%AC%E4%B8%89%E6%96%B9%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93(.so)%E6%96%87%E4%BB%B6/index.html">
+<meta property="og:site_name" content="Junshuo&#39;s Blog">
+<meta property="og:description" content="在开发socket通信节点时，我使用了libsocket开源库，我使用了较为推荐的动态链接的方式，并成功在ROS节点中调用。 我C++基础不太行，理解可能有错，欢迎执政。 动态链接库是啥为什么c&#x2F;c++开源库使用前需要编译，直接调用源码，最后一起编译不行吗  这样可以运行，但有两个问题：  每个新程序要使用开源库中的api，都需要重新编译部分甚至整个开源库源代码，这会浪费大量的时间； 如">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-10T22:40:03.000Z">
+<meta property="article:modified_time" content="2023-02-10T22:40:21.000Z">
+<meta property="article:author" content="Junshuo">
+<meta property="article:tag" content="ROS">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="/css/highlight/dark.css" media="none">
+        
+    
+
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+    <body>
+        <div id="app" tabindex="-1">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">Junshuo&#39;s Blog</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        ROS 环境使用第三方动态链接库(.so)文件
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2023/02/" class="post-meta__date button">2023-02-10</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>在开发socket通信节点时，我使用了<a target="_blank" rel="noopener" href="https://github.com/dermesser/libsocket">libsocket开源库</a>，我使用了较为推荐的动态链接的方式，并成功在ROS节点中调用。</p>
+<p>我C++基础不太行，理解可能有错，欢迎执政。</p>
+<h1 id="动态链接库是啥"><a href="#动态链接库是啥" class="headerlink" title="动态链接库是啥"></a>动态链接库是啥</h1><p>为什么c&#x2F;c++开源库使用前需要编译，直接调用源码，最后一起编译不行吗</p>
+<blockquote>
+<p>这样可以运行，但有两个问题：</p>
+<ol>
+<li>每个新程序要使用开源库中的api，都需要重新编译部分甚至整个开源库源代码，这会浪费大量的时间；</li>
+<li>如果有多个程序同时使用同一个库，每个程序都将生成一份这个库的二进制文件，这会浪费大量的磁盘空间；当这些程序同时运行时，每个程序的内存中都会装载一份库的二进制代码，这会浪费大量的内存空间。</li>
+</ol>
+<p>因此，<strong>直接将第三方库的源代码包含到当前程序的代码中编译是效率非常低下的方式</strong>，实际中除非极特殊情况，不会考虑使用这种方式，而是将开源库源代码编译成二进制的动态链接库，其他程序要使用其中的API时，只需要指定动态链接库的入口点，程序运行时加载动态链接库 并找到其中的函数入口点就可以调用开源库API。并且，当有多个程序调用此动态链接库时，只会占用一份内存空间。</p>
+</blockquote>
+<h1 id="编译动态链接库"><a href="#编译动态链接库" class="headerlink" title="编译动态链接库"></a>编译动态链接库</h1><p>我这里用到了libsocket这个库</p>
+<p>按照libsocket的README，对libsocket进行编译。</p>
+<p>编译后就能得到.so文件了。</p>
+<p>头文件还是原来的头文件（C++中头文件不用被编译）</p>
+<h1 id="⭐在编译时调用-so文件"><a href="#⭐在编译时调用-so文件" class="headerlink" title="⭐在编译时调用.so文件"></a><strong>⭐在编译时调用.so文件</strong></h1><p><strong><a target="_blank" rel="noopener" href="https://blog.csdn.net/Flag_ing/article/details/126040476">https://blog.csdn.net/Flag_ing/article/details/126040476</a></strong></p>
+<p>假设我的节点源文件名为 test_node.cpp，需要调用的第三方动态链接库的名字叫 libThirdLib.so。</p>
+<ol>
+<li>在该节点的根目录下（保姆提示：也就是<strong>跟</strong>存放cpp文件的<strong>src文件夹同级</strong>）创建一个文件夹存放 libThirdLib.so，文件夹命名随意，我这就叫 lib 了，即&#x2F;home&#x2F;{<em>usr_name}</em>&#x2F;{<em>workspace_name}</em>&#x2F;src&#x2F;{<em>pkg_name}</em>&#x2F;lib&#x2F;libThirdLib.so</li>
+<li>将.so对应的.hpp头文件复制到&#x2F;home&#x2F;{<em>usr_name}</em>&#x2F;{<em>workspace_name}</em>&#x2F;src&#x2F;{<em>pkg_name}</em>&#x2F;include&#x2F;test_node下</li>
+</ol>
+<p>CMakeLists.txt 文件中对应的修改如下：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#。。。前面的部分省略。。。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">include_directories</span>(</span><br><span class="line">  <span class="keyword">include</span>/test_node  <span class="comment"># 这个是相对于这个包的相对路径，头文件放在这里。如果放别的地方记得该这里的路径</span></span><br><span class="line">  <span class="variable">$&#123;catkin_INCLUDE_DIRS&#125;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ！！这个是需要手动加进去的，原始的 CMakeLists.txt 中没有！！</span></span><br><span class="line"><span class="comment"># 用于指定动态链接库的包含路径</span></span><br><span class="line"><span class="comment"># 另外一定要放在 add_executable() 的前面</span></span><br><span class="line"><span class="keyword">link_directories</span>(</span><br><span class="line">  lib <span class="comment"># 相对路径，指定动态链接库的访问路径</span></span><br><span class="line">  <span class="variable">$&#123;catkin_LIB_DIRS&#125;</span></span><br><span class="line">)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">add_executable</span>(test_node src/test_node.cpp)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 需要链接的库，在这里加入第三方动态链接库</span></span><br><span class="line"><span class="keyword">target_link_libraries</span>(test_node</span><br><span class="line">  <span class="variable">$&#123;catkin_LIBRARIES&#125;</span></span><br><span class="line">  ThirdLib   <span class="comment"># 加入需要链接的libThirdLib.so文件，注意去掉前缀 lib 和拓展名 .so(我猜lib前缀是在生成动态链接库时自动加上的)</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>总结：</p>
+<ol>
+<li><p>在 <strong>include_directories</strong> 中添加头文件路径</p>
+</li>
+<li><p>在 <strong>link_directories</strong> 中包含动态链接库的位置，并且一定要放在 add_executable() 的前面</p>
+</li>
+<li><p>在 <strong>target_link_libraries</strong> 中加入相应的动态连接库的名字，注意去点前缀 lib 和拓展名 .so</p>
+</li>
+</ol>
+<p>之后在代码添加include就行了。</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>更新于 2023-02-10</p></div> 
+    <div class="post-entry__tags"><a href="/tags/ROS/" class="post-tags__link button"># ROS</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2023/02/26/%E5%B8%B8%E7%94%A8%E8%BF%9C%E7%A8%8B%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E6%B1%87%E6%80%BB/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            上一篇
+                        </div>
+                        <div class="nav__title">
+                            常用远程开发工具汇总
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2023/02/01/%E8%AE%A9Github%20Pages%20+%20Hexo%E5%8D%9A%E5%AE%A2%E6%9B%B4%E6%98%93%E7%94%A8/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            下一篇
+                        </div>
+                        <div class="nav__title">
+                            让Github Pages + Hexo博客更易用
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2022&nbsp;-&nbsp;2023 <a href="/">Junshuo&#39;s Blog</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+
+    
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

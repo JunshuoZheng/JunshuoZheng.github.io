@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/favicon_package_v0.16/favicon.ico">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon_package_v0.16/favicon-16x16.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon_package_v0.16/favicon-32x32.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon_package_v0.16/apple-touch-icon.png">
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>常用远程开发工具汇总 | Junshuo&#39;s Blog</title>
+
+
+    <meta name="keywords" content="Tools">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="在小电脑（Jetson）上进行 Linux 开发时，需要连接一堆外设，很不方便。我们可以使用自己的电脑进行远程开发，这样 Jetson 插上电源开机就行，不用连显示器和外设。 以下所有工具和方法均需要固定 IP 地址。 ⭐Xshell（最常用）远程连接 Linux 终端 https:&#x2F;&#x2F;www.xshell.com&#x2F;zh&#x2F;xshell&#x2F; 现在可以下载免费的 Xshell 了，只要注册一下就行： h">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用远程开发工具汇总">
+<meta property="og:url" content="http://yoursite.com/2023/02/26/%E5%B8%B8%E7%94%A8%E8%BF%9C%E7%A8%8B%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E6%B1%87%E6%80%BB/index.html">
+<meta property="og:site_name" content="Junshuo&#39;s Blog">
+<meta property="og:description" content="在小电脑（Jetson）上进行 Linux 开发时，需要连接一堆外设，很不方便。我们可以使用自己的电脑进行远程开发，这样 Jetson 插上电源开机就行，不用连显示器和外设。 以下所有工具和方法均需要固定 IP 地址。 ⭐Xshell（最常用）远程连接 Linux 终端 https:&#x2F;&#x2F;www.xshell.com&#x2F;zh&#x2F;xshell&#x2F; 现在可以下载免费的 Xshell 了，只要注册一下就行： h">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://nuc-epoch.feishu.cn/space/api/box/stream/download/asynccode/?code=N2U2ZDRmYzkyMWRkZjJkYjIxN2VmMGM2ZWI3NjE3NzlfQVhxRG5SdjRQWmJHOVVSQUp3d0xkRW8yTVhIWFhNZ3NfVG9rZW46Ym94Y25ydTBhdnN1QnYzdWJJMDNtMlJwN1RnXzE2Nzc0MTkxMTU6MTY3NzQyMjcxNV9WNA">
+<meta property="og:image" content="https://nuc-epoch.feishu.cn/space/api/box/stream/download/asynccode/?code=MWMwMmUxYjQ2YWE1MjBiYjliOGQ5ZjRkM2YzOWUyZjJfU2dCdVZuYXVKMURwblhMZ0xGa3lXUzBlclNVN1B0VGVfVG9rZW46Ym94Y25yU3NaWFR3MW50OTB5MVpPTkVSN05lXzE2Nzc0MTkxMTU6MTY3NzQyMjcxNV9WNA">
+<meta property="og:image" content="https://nuc-epoch.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmJjNmFhYmFiMTlhMmJjMzYxMDRiY2IzYTMzNDQ5NzhfVmZ0ZUg4R2dYWlZMUWRWYTNVZHl3V1hzRFV5cHhSSzlfVG9rZW46Ym94Y25oTnIzMEY4TUpNMjN1UEthaW9KRHpoXzE2Nzc0MTkxMTU6MTY3NzQyMjcxNV9WNA">
+<meta property="og:image" content="https://nuc-epoch.feishu.cn/space/api/box/stream/download/asynccode/?code=NmQyZDViMTlhNzM4ZDE1ZmJmM2UzNTI0MjM0OWMwOGVfM2xuMlBGY09peks5bFVCb1I4enUxR3M4VlRRYXl0TUVfVG9rZW46Ym94Y25NeW9JUGRqa1VrSjNhYno3cU52RkFoXzE2Nzc0MTkxMTU6MTY3NzQyMjcxNV9WNA">
+<meta property="og:image" content="https://nuc-epoch.feishu.cn/space/api/box/stream/download/asynccode/?code=ZThlYmE1NTM0ZTI1MjA1ZTI0NTFiYTM4NDFlODk5MDRfaUJRRGJ6THpLNEZVcXNzejJrSEhZTEg4MzJHQUQzVk1fVG9rZW46Ym94Y25RN1dnU2dXNHdKaFBEYlN2WDRnRFdzXzE2Nzc0MTkxMTU6MTY3NzQyMjcxNV9WNA">
+<meta property="article:published_time" content="2023-02-26T21:46:20.000Z">
+<meta property="article:modified_time" content="2023-02-26T21:46:20.000Z">
+<meta property="article:author" content="Junshuo">
+<meta property="article:tag" content="Tools">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://nuc-epoch.feishu.cn/space/api/box/stream/download/asynccode/?code=N2U2ZDRmYzkyMWRkZjJkYjIxN2VmMGM2ZWI3NjE3NzlfQVhxRG5SdjRQWmJHOVVSQUp3d0xkRW8yTVhIWFhNZ3NfVG9rZW46Ym94Y25ydTBhdnN1QnYzdWJJMDNtMlJwN1RnXzE2Nzc0MTkxMTU6MTY3NzQyMjcxNV9WNA">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="/css/highlight/dark.css" media="none">
+        
+    
+
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+    <body>
+        <div id="app" tabindex="-1">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">Junshuo&#39;s Blog</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        常用远程开发工具汇总
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2023/02/" class="post-meta__date button">2023-02-26</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>在小电脑（Jetson）上进行 Linux 开发时，需要连接一堆外设，很不方便。我们可以使用自己的电脑进行远程开发，这样 Jetson 插上电源开机就行，不用连显示器和外设。</p>
+<p>以下所有工具和方法均需要固定 IP 地址。</p>
+<h1 id="⭐Xshell（最常用）"><a href="#⭐Xshell（最常用）" class="headerlink" title="⭐Xshell（最常用）"></a>⭐Xshell（最常用）</h1><p>远程连接 Linux 终端</p>
+<p><a target="_blank" rel="noopener" href="https://www.xshell.com/zh/xshell/">https://www.xshell.com/zh/xshell/</a></p>
+<p>现在可以下载免费的 Xshell 了，只要注册一下就行：</p>
+<p><a target="_blank" rel="noopener" href="https://www.xshell.com/zh/free-for-home-school/">https://www.xshell.com/zh/free-for-home-school/</a></p>
+<h1 id="⭐Xming"><a href="#⭐Xming" class="headerlink" title="⭐Xming"></a>⭐Xming</h1><p><a target="_blank" rel="noopener" href="https://sourceforge.net/projects/xming/">下载地址：Xming X Server for Windows</a></p>
+<p>调试视觉和 ROS 的时候经常要用到图形化的工具，而使用 VNC Viewer 的话在开发的流程中太割裂。</p>
+<p>Xming是一个X11转发工具，可以把 Linux 的X11窗口转发到 Windows 上，实现在 Windows PC 下使用 Linux 图形化程序。配合 Xshell 使用，效果如下：</p>
+<p><img src="https://nuc-epoch.feishu.cn/space/api/box/stream/download/asynccode/?code=N2U2ZDRmYzkyMWRkZjJkYjIxN2VmMGM2ZWI3NjE3NzlfQVhxRG5SdjRQWmJHOVVSQUp3d0xkRW8yTVhIWFhNZ3NfVG9rZW46Ym94Y25ydTBhdnN1QnYzdWJJMDNtMlJwN1RnXzE2Nzc0MTkxMTU6MTY3NzQyMjcxNV9WNA"></p>
+<p><strong>开启之后会造成 Xshell 轻微卡顿</strong></p>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><ol>
+<li>下载安装Xming，打开 XLaunch 一路 Next 无需修改，启动 Xming</li>
+</ol>
+<p><img src="https://nuc-epoch.feishu.cn/space/api/box/stream/download/asynccode/?code=MWMwMmUxYjQ2YWE1MjBiYjliOGQ5ZjRkM2YzOWUyZjJfU2dCdVZuYXVKMURwblhMZ0xGa3lXUzBlclNVN1B0VGVfVG9rZW46Ym94Y25yU3NaWFR3MW50OTB5MVpPTkVSN05lXzE2Nzc0MTkxMTU6MTY3NzQyMjcxNV9WNA"></p>
+<ol start="2">
+<li><p>在Xming的安装目录找到X0.hosts文件（X0.hosts中的0就是刚才需要记住的Display number），并在localhost下一行添加你的服务器IP（即 Jetson 的IP）</p>
+<p><img src="https://nuc-epoch.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmJjNmFhYmFiMTlhMmJjMzYxMDRiY2IzYTMzNDQ5NzhfVmZ0ZUg4R2dYWlZMUWRWYTNVZHl3V1hzRFV5cHhSSzlfVG9rZW46Ym94Y25oTnIzMEY4TUpNMjN1UEthaW9KRHpoXzE2Nzc0MTkxMTU6MTY3NzQyMjcxNV9WNA"></p>
+</li>
+<li><p>在 Xshell 设置 X11 转发：勾选 X DISPLAY，填入<code>localhost``:x.0</code>，（x&#x3D;第一步中的display nuber，默认为0）</p>
+<p><img src="https://nuc-epoch.feishu.cn/space/api/box/stream/download/asynccode/?code=NmQyZDViMTlhNzM4ZDE1ZmJmM2UzNTI0MjM0OWMwOGVfM2xuMlBGY09peks5bFVCb1I4enUxR3M4VlRRYXl0TUVfVG9rZW46Ym94Y25NeW9JUGRqa1VrSjNhYno3cU52RkFoXzE2Nzc0MTkxMTU6MTY3NzQyMjcxNV9WNA"></p>
+</li>
+<li><p>远程配置：打开远程终端，输入</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;export DISPLAY=&quot;127.0.0.1:10.0&quot;&#x27;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>127.0.0.1</code>为本机地址，<code>10.0</code>是默认的。</p>
+<p>在终端打开 <code>xauth list</code> 可以看到，在我的 Xavier NX 上可以看到这几个号，把10换成11或者12也能用。</p>
+<p><img src="https://nuc-epoch.feishu.cn/space/api/box/stream/download/asynccode/?code=ZThlYmE1NTM0ZTI1MjA1ZTI0NTFiYTM4NDFlODk5MDRfaUJRRGJ6THpLNEZVcXNzejJrSEhZTEg4MzJHQUQzVk1fVG9rZW46Ym94Y25RN1dnU2dXNHdKaFBEYlN2WDRnRFdzXzE2Nzc0MTkxMTU6MTY3NzQyMjcxNV9WNA"></p>
+<p>这里遇到的坑：</p>
+<ol>
+<li><p>网上的教程大多解释说是和第一步的 display number 对应的，其实和那个没关系。（至少在我的环境中，这二者毫无关系）</p>
+</li>
+<li><p><code>127.0.0.1</code>有的教程写的<code>localhost</code> ，但是我的环境中没有指定localhost。</p>
+</li>
+<li><p>远程配置：打开远程终端，打开<code>vi /etc/ssh/sshd_config</code>，修改X11Forwarding 改为为“yes”，如被#注释，需取消注释。</p>
+</li>
+<li><p>完成。</p>
+</li>
+</ol>
+<blockquote>
+<p>也可以配置 VSCode 的终端，参考：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_53976855/article/details/128950017">网线直连NUC调试并使用VSCode实现X11转发(Jetson，树莓派适用)_wangzihanggg的博客-CSDN博客</a></p>
+</blockquote>
+<h1 id="⭐WinSCP（最常用）"><a href="#⭐WinSCP（最常用）" class="headerlink" title="⭐WinSCP（最常用）"></a>⭐WinSCP（最常用）</h1><p>远程文件管理，能直接拖动文件进行移动和复制。</p>
+<p><a target="_blank" rel="noopener" href="https://winscp.net/">https://winscp.net/</a></p>
+<h1 id="⭐VSCode（最常用）"><a href="#⭐VSCode（最常用）" class="headerlink" title="⭐VSCode（最常用）"></a>⭐VSCode（最常用）</h1><p>使用 VSCode 和 SSH 远程写代码。</p>
+<h2 id="使用方法-1"><a href="#使用方法-1" class="headerlink" title="使用方法"></a>使用方法</h2><p>参见官方文档：</p>
+<p><a target="_blank" rel="noopener" href="https://code.visualstudio.com/docs/remote/ssh">https://code.visualstudio.com/docs/remote/ssh</a></p>
+<h1 id="VNC-Viewer"><a href="#VNC-Viewer" class="headerlink" title="VNC Viewer"></a>VNC Viewer</h1><p>一款远程桌面软件。非常卡顿，不推荐使用。</p>
+<h2 id="使用方法-2"><a href="#使用方法-2" class="headerlink" title="使用方法"></a>使用方法</h2><p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/embedded/learn/tutorials/vnc-setup">https://developer.nvidia.com/embedded/learn/tutorials/vnc-setup</a></p>
+<p>推荐购买一个 HDMI 欺骗器（淘宝3块钱一个），能有效避免分辨率问题。</p>
+<h1 id="Jetbrains-Gateway（不可用）"><a href="#Jetbrains-Gateway（不可用）" class="headerlink" title="Jetbrains Gateway（不可用）"></a>Jetbrains Gateway（不可用）</h1><p><a target="_blank" rel="noopener" href="https://blog.jetbrains.com/zh-hans/blog/2021/12/03/dive-into-jetbrains-gateway/">深入了解 JetBrains Gateway | Company Blog</a></p>
+<p><strong>目前（2023年2月）完全不可用。暂时不推荐使用，不如 VSCode！！</strong></p>
+<p>可以在 Jetson 上运行 Jetbrains 的 IDE，然后连接到PC上的瘦客户端。概念类似于云电脑，本地只负责编写代码，所有的存储、编译过程全在 Jetson 上。</p>
+<p>优点：</p>
+<ol>
+<li><p>配置比较简单，且不需要配置本地环境。</p>
+</li>
+<li><p>方便监控Jetson的状态</p>
+</li>
+<li><p>不依赖本地环境，用别人的电脑也可以很快进入到开发状态</p>
+</li>
+<li><p>支持 Jetbrains 的 Clion 、Pycharm 等多个 IDE，JB 家的 IDE 做的很棒，比 VSCode 好用多了</p>
+</li>
+<li><p>集成在 Jetbrains 的 IDE 之中，如果你有 Clion 或者 Pycharm，无需安装额外的软件</p>
+</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li><p><strong>致命缺点1：延迟太大了，写一句话都有明显延迟</strong></p>
+</li>
+<li><p><strong>致命缺点2：占用</strong> <strong>CPU</strong> <strong>资源太多。</strong>在 Jetson Xavier NX 什么都没运行时 CPU 占用大概在 30% 左右，打开 Clion 之后大概在 55% 左右，打开一个文件时，CPU 占用会飙到100%。</p>
+</li>
+<li><p>打开速度慢，在 NX 上打开竟然要用三分钟…</p>
+</li>
+<li><p>和 VSCode Remote 的原理不一样，Gateway 需要传输画面</p>
+</li>
+</ol>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>更新于 2023-02-26</p></div> 
+    <div class="post-entry__tags"><a href="/tags/Tools/" class="post-tags__link button"># Tools</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2023/02/26/%E5%9C%A8Nvidia%20Jetson%E4%B8%8A%E5%AE%89%E8%A3%85OpenCV%20with%20CUDA/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            上一篇
+                        </div>
+                        <div class="nav__title">
+                            在Nvidia Jetson上安装OpenCV with CUDA
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2023/02/10/ROS%20%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8%E7%AC%AC%E4%B8%89%E6%96%B9%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93(.so)%E6%96%87%E4%BB%B6/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            下一篇
+                        </div>
+                        <div class="nav__title">
+                            ROS 环境使用第三方动态链接库(.so)文件
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2022&nbsp;-&nbsp;2023 <a href="/">Junshuo&#39;s Blog</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+
+    
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>
